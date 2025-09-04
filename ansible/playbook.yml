@@ -78,7 +78,7 @@
         state: started
         enabled: yes
 
-    - name: Deploy WebAppSuite application
-      get_url:
-        url: https://github.com/devopshydclub/WebAppSuite-project/releases/download/v1/WebAppSuite-v1.war
-        dest: /opt/tomcat/webapps/WebAppSuite.war
+    #    - name: Deploy WebAppSuite application
+#      get_url:
+#        url: https://github.com/devopshydclub/WebAppSuite-project/releases/download/v1/WebAppSuite-v1.war
+#        dest: /opt/tomcat/webapps/WebAppSuite.war
