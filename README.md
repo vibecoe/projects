@@ -36,8 +36,8 @@ To run this project, you will need the following:
 1.  **Clone the repository:**
 
     ```
-    git clone https://github.com/your-username/WebAppSuite-project.git
-    cd WebAppSuite-project
+    git clone https://github.com/vibecoe/projects.git
+    cd vprofile-project
     ```
 
 2.  **Provision the infrastructure:**
