@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/devopshydclub/WebAppSuite-project.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    docker.build("webappsuite/webappsuite-app:latest", "./app-source")
+                }
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                sh 'trivy image webappsuite/webappsuite-app:latest'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                ansiblePlaybook(
+                    playbook: 'ansible/playbook.yml',
+                    inventory: 'ansible/inventory',
+                    credentialsId: 'ansible-ssh-credentials'
+                )
+            }
+        }
+
+        stage('Integration Test') {
+            steps {
+                sh 'echo "Running integration tests..."'
+                // In a real-world scenario, you would run your integration tests here.
+            }
+        }
+
+        stage('End-to-End Test') {
+            steps {
+                sh 'curl -s http://<your-load-balancer-dns-name> | grep "WebAppSuite"'
+            }
+        }
+    }
+}
